@@ -9,7 +9,7 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 - **Validaciones**: Usa `express-validator` para validar datos y un middleware personalizado para restringir publishers.
 - **Arquitectura**: Diseño en capas (Controllers, Services, Repositories) con patrones como Repository y DTO.
 - **Base de datos**: PostgreSQL alojada en Neon.
-- **Desplegada en**: [Render](https://tu-url.onrender.com) (reemplaza con tu URL real).
+- **Desplegada en**: [Render](https://nintendo-switch-api.onrender.com/api/games).
 
 ## Tecnologías
 - **Backend**: Node.js, Express.js
