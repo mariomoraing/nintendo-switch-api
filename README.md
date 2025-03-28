@@ -87,14 +87,47 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
          "username": "mario",
          "password": "222222"
       }
-   - Respuesta (éxito):
+   - Respuesta 201 Created (éxito):
       ```json
       {
       "user": { "id": 1, "username": "mario" },
       "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
       }
-   - Respuesta (límite alcanzado):
+   - Respuesta 400 Bad Request (límite alcanzado):
       ```json
       {
       "message": "Se ha alcanzado el límite máximo de usuarios registrados"
       }
+   - Respuesta 400 Bad Request (el usuario ya existe):
+      ```json
+      {
+      "message": "El usuario ya existe"
+      }
+
+- **POST /api/auth/login**
+- Descripción: Inicia sesión y devuelve un token JWT para autenticación.
+   - Cuerpo:
+   ```json
+   {
+    "username": "string (requerido)",
+    "password": "string (requerido)"
+   }
+   - Respuesta 200 Ok:
+   ```json
+   {
+    "user": { "id": 1, "username": "mario" },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+   }
+   - Respuesta 401 Unauthorized (credenciales inválidas):
+   ```json
+   {
+    "message": "Usuario no encontrado"
+   }
+   o
+   ```json
+   {
+    "message": "Contraseña incorrecta"
+   }
+
+### Juegos
+- Nota: Los endpoints `POST`, `PUT` y `DELETE` requieren autenticación. Incluye el header `Authorization: Bearer <token>`.
