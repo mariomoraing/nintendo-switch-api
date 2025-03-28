@@ -105,29 +105,44 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
       }
 
 - **POST /api/auth/login**
-- Descripción: Inicia sesión y devuelve un token JWT para autenticación.
-   - Cuerpo:
+- **Descripción**: Inicia sesión y devuelve un token JWT para autenticación.
+   - **Cuerpo**:
    ```json
    {
     "username": "string (requerido)",
     "password": "string (requerido)"
    }
-   - Respuesta 200 Ok:
+   ```
+
+   - Respuesta **200 Ok**:
    ```json
    {
     "user": { "id": 1, "username": "mario" },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
    }
-   - Respuesta 401 Unauthorized (credenciales inválidas):
+   ```
+   - Respuesta **401 Unauthorized** (credenciales inválidas):
    ```json
    {
     "message": "Usuario no encontrado"
    }
+   ```
    o
    ```json
    {
     "message": "Contraseña incorrecta"
    }
+   ```
 
 ### Juegos
 - Nota: Los endpoints `POST`, `PUT` y `DELETE` requieren autenticación. Incluye el header `Authorization: Bearer <token>`.
+- **GET /api/games**
+   - **Descripción**: Lista de todos los juegos disponibles.
+   - **Respuestas**:
+      - **200 Ok**
+      ```json
+      [
+         { "id": 1, "title": "The Legend of Zelda: Breath of the Wild", "genre": "Action-Adventure", "releaseDate": "2017-03-03", "publisher": "Nintendo" }
+      ]
+      ```
+       
