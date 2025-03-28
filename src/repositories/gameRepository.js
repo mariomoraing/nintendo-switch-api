@@ -1,38 +1,52 @@
-const pool = require('../config/database');
+const prisma = require('../config/prisma');
 const Game = require('../models/game');
 
 class GameRepository {
+
     async getAllGames() {
-        const { rows } = await pool.query('SELECT * FROM games');
-        return rows.map(row => new Game(row.id, row.title, row.genre, row.release_date, row.publisher));
+        const games = await prisma.games.findMany();
+        return games.map(game => new Game(game.id, game.title, game.genre, game.release_date, game.publisher));
     }
 
     async getGameById(id) {
-        const { rows } = await pool.query('SELECT * FROM games WHERE id = $1', [id]);
-        if (rows.length === 0) return null;
-        return new Game(rows[0].id, rows[0].title, rows[0].genre, rows[0].release_date, rows[0].publisher);
+        const game = await prisma.games.findUnique({
+            where: { id: parseInt(id) }
+        });
+
+        if (!game) return null;
+        return new Game(game.id, game.title, game.genre, game.releaseDate, game.publisher);
     }
 
     async createGame(game) {
-        const { rows } = await pool.query(
-            'INSERT INTO games (title, genre, release_date, publisher) VALUES ($1, $2, $3, $4) RETURNING *',
-            [game.title, game.genre, game.release_date, game.publisher]
-        );
-        return new Game(rows[0].id, rows[0].title, rows[0].genre, rows[0].release_date, rows[0].publisher);
+        const newGame = await prisma.games.create({
+            data: {
+                title: game.title,
+                genre: game.genre,
+                release_date: game.release_date ? new Date(game.release_date) : null,
+                publisher: game.publisher
+            }
+        });
+        return new Game(newGame.id, newGame.title, newGame.genre, newGame.releaseDate, newGame.publisher);
     }
 
     async updateGame(id, gameData) {
-        const { rows } = await pool.query(
-            'UPDATE games SET title = $1, genre = $2, release_date = $3, publisher = $4 WHERE id = $5 RETURNING *',
-            [gameData.title, gameData.genre, gameData.release_date, gameData.publisher, id]
-        );
-        if (rows.length === 0) return null;
-        return new Game(rows[0].id, rows[0].title, rows[0].genre, rows[0].release_date, rows[0].publisher);
+        const updatedGame = await prisma.games.update({
+            where: { id: parseInt(id) },
+            data: {
+                title: gameData.title,
+                genre: gameData.genre,
+                release_date: gameData.release_date ? new Date(gameData.release_date) : null,
+                publisher: gameData.publisher
+            }
+        });
+        return new Game(updatedGame.id, updatedGame.title, updatedGame.genre, updatedGame.releaseDate, updatedGame.publisher);
     }
 
     async deleteGame(id) {
-        const { rowCount } = await pool.query('DELETE FROM games WHERE id = $1', [id]);
-        return rowCount > 0;
+        await prisma.games.delete({
+            where: { id: parseInt(id) }
+        });
+        return true;
     }
 }
 
