@@ -21,6 +21,11 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 - **Control de versiones**: Git, GitHub
 - **Despliegue**: Render
 
+## Documentación
+La documentación interactiva de la API está disponible en:  
+[https://nintendo-switch-api.onrender.com/api-docs](https://nintendo-switch-api.onrender.com/api-docs)  
+Desarrollada con Swagger (OpenAPI 3.0), permite probar los endpoints directamente desde el navegador.
+
 ## Instalación local
 
 ### Prerrequisitos

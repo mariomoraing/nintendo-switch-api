@@ -1,6 +1,10 @@
 require('dotenv').config();
 const express = require('express');
 const helmet = require('helmet');
+const swaggerui = require('swagger-ui-express');
+const yaml = require('yamljs');
+
+const swaggerDocument = yaml.load('./swagger.yaml');
 
 const gameRoutes = require('./src/routes/gameRoutes');
 const authRoutes = require('./src/routes/authRoutes');
@@ -24,6 +28,7 @@ app.use(helmet({
 app.use(express.json());
 app.use('/api', gameRoutes);
 app.use('/api/auth', authRoutes);
+app.use('/api-docs', swaggerui.serve, swaggerui.setup(swaggerDocument));
 
 app.listen(port, () => {
     console.log(`Server running on port ${port}`);
