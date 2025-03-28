@@ -15,7 +15,7 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 - **Backend**: Node.js, Express.js
 - **Base de datos**: PostgreSQL (Neon)
 - **Autenticación**: JWT (`jsonwebtoken`), `bcrypt` para hash de contraseñas
-- **Seguridad**: Helmet
+- **Seguridad**: `helmet`
 - **Validación**: `express-validator`
 - **Control de versiones**: Git, GitHub
 - **Despliegue**: Render
@@ -67,3 +67,23 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
    npm start
 
 6. La API estará disponible en http://localhost:3000
+
+## Endpoints
+### Autenticación
+
+- **POST /api/auth/register**
+
+- **Descripción: Registra un nuevo usuario**
+- **Cuerpo:**
+   ```json
+   {
+    "username": "mario",
+    "password": "123456"
+   }
+
+- **Respuesta:**
+   ```json
+   {
+    "user": { "id": 1, "username": "mario" },
+    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+   }
