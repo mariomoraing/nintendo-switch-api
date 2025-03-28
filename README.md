@@ -4,6 +4,7 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 
 ## Características
 - **Seguridad**: Configuración de encabezados HTTP con Helmet para proteger contra vulnerabilidades comunes.
+- **Límite de usuarios**: Máximo de 50 usuarios registrados (configurable vía `MAX_USERS` en variables de entorno).
 - **Endpoints CRUD**: Gestiona juegos con operaciones GET, POST, PUT y DELETE.
 - **Autenticación**: Registro e inicio de sesión de usuarios con JWT para proteger endpoints sensibles.
 - **Validaciones**: Usa `express-validator` para validar datos y un middleware personalizado para restringir publishers.
@@ -69,21 +70,28 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 6. La API estará disponible en http://localhost:3000
 
 ## Endpoints
+
 ### Autenticación
 
 - **POST /api/auth/register**
 
 - **Descripción: Registra un nuevo usuario**
-- **Cuerpo:**
-   ```json
-   {
-    "username": "mario",
-    "password": "123456"
-   }
-
-- **Respuesta:**
+- Descripción: Registra un nuevo usuario (limitado a un máximo configurable, por defecto 50).
+  - Nota: Devuelve un error si se alcanza el límite de usuarios.
+  - Cuerpo:
+    ```json
+    {
+      "username": "mario",
+      "password": "222222"
+    }
+   - Respuesta (éxito):
    ```json
    {
     "user": { "id": 1, "username": "mario" },
     "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+   }
+   - Respuesta (límite alcanzado):
+   ```json
+   {
+    "message": "Se ha alcanzado el límite máximo de usuarios registrados"
    }
