@@ -47,6 +47,8 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
    DB_PORT=tu_puerto_de_db
    JWT_SECRET=tu_secreto_super_secreto
    PORT=3000
+   NODE_ENV=production
+   MAX_USERS=tu_cantidad_de_usuarios_limite
 
 4. Crea las tablas en tu base de datos PostgreSQL:
    ```sql
@@ -57,6 +59,7 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
     release_date DATE,
     publisher VARCHAR(50)
    );
+
    CREATE TABLE users (
     id SERIAL PRIMARY KEY,
     username VARCHAR(50) NOT NULL UNIQUE,
@@ -77,21 +80,21 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 
 - **Descripción: Registra un nuevo usuario**
 - Descripción: Registra un nuevo usuario (limitado a un máximo configurable, por defecto 50).
-  - Nota: Devuelve un error si se alcanza el límite de usuarios.
-  - Cuerpo:
-    ```json
-    {
-      "username": "mario",
-      "password": "222222"
-    }
+   - Nota: Devuelve un error si se alcanza el límite de usuarios.
+   - Cuerpo:
+      ```json
+      {
+         "username": "mario",
+         "password": "222222"
+      }
    - Respuesta (éxito):
-   ```json
-   {
-    "user": { "id": 1, "username": "mario" },
-    "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
-   }
+      ```json
+      {
+      "user": { "id": 1, "username": "mario" },
+      "token": "eyJhbGciOiJIUzI1NiIsInR5cCI6IkpXVCJ9..."
+      }
    - Respuesta (límite alcanzado):
-   ```json
-   {
-    "message": "Se ha alcanzado el límite máximo de usuarios registrados"
-   }
+      ```json
+      {
+      "message": "Se ha alcanzado el límite máximo de usuarios registrados"
+      }
