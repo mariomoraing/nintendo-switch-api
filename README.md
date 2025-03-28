@@ -106,7 +106,7 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
 
 - **POST /api/auth/login**
 - **Descripción**: Inicia sesión y devuelve un token JWT para autenticación.
-   - **Cuerpo**:
+   - **Cuerpo** (application/json):
    ```json
    {
     "username": "string (requerido)",
@@ -145,4 +145,121 @@ Una API RESTful para gestionar información sobre juegos de Nintendo Switch, con
          { "id": 1, "title": "The Legend of Zelda: Breath of the Wild", "genre": "Action-Adventure", "releaseDate": "2017-03-03", "publisher": "Nintendo" }
       ]
       ```
-       
+- **GET /api/games/:id**
+   - **Descripción**: Obtiene un juego específico por su ID.
+   - **Parámetros**:
+      - `id`: Número entero positivo (requerido).
+   - **Respuestas**:
+      - **200 Ok**
+      ```json
+      { "id": 1, "title": "The Legend of Zelda: Breath of the Wild", "genre": "Action-Adventure", "releaseDate": "2017-03-03", "publisher": "Nintendo" }
+      ```
+      - **400 Bad Request** (ID inválido)
+      ```json
+      {
+         "errors": [{ "msg": "El ID debe ser un número entero positivo", "path": "id" }]
+      }
+      ```
+      - **404 Not Found**
+      ```json
+      {
+         "message": "Game not found"
+      }
+      ```
+
+- **POST /api/games/**
+   - **Descripción**: Crea un nuevo juego (requiere autenticación).
+   - **Cuerpo** (application/json):
+   ```json
+   {
+    "title": "string (requerido)",
+    "genre": "string (opcional)",
+    "release_date": "YYYY-MM-DD (requerido)",
+    "publisher": "string (requerido, solo: Nintendo, Capcom, Square Enix, Bandai Namco)"
+   }
+   ```
+   - **Respuestas**:
+      - **201 Created**
+      ```json
+      { "id": 2, "title": "Metroid Dread", "genre": "Action-Adventure", "releaseDate": "2021-10-08", "publisher": "Nintendo" }
+      ```
+      - **400 Bad Request** (validación fallida):
+      ```json
+      {
+         "errors": [{ "msg": "El título es obligatorio", "path": "title" }]
+      }
+      ```
+      - **400 Bad Request** (publisher inválido):
+      ```json
+      {
+         "message": "El publicador 'Unknown' no está permitido. Opciones válidas: Nintendo, Capcom, Square Enix, Bandai Namco"
+      }
+      ```
+      - **401 Unauthorized**:
+      ```json
+      {
+         "message": "Token requerido"
+      }
+      ```
+
+- **PUT /api/games/:id**
+   - **Descripción**: Actualiza un juego existente (requiere autenticación).
+   - **Parámetros**:
+      - `id`: Número entero positivo (requerido).
+   - **Cuerpo** (application/json):
+   ```json
+   {
+    "title": "string (requerido)",
+    "genre": "string (opcional)",
+    "release_date": "YYYY-MM-DD (requerido)",
+    "publisher": "string (requerido, solo: Nintendo, Capcom, Square Enix, Bandai Namco)"   
+   }
+   ```
+   - **Respuestas**:
+      - **200 Ok**:
+      ```json
+      { "id": 1, "title": "The Legend of Zelda: Tears of the Kingdom", "genre": "Action-Adventure", "releaseDate": "2023-05-12", "publisher": "Nintendo" }
+      ```
+      - **400 Bad Request** (ID inválido o validación fallida):
+      ```json
+      {
+         "errors": [{ "msg": "El ID debe ser un número entero positivo", "path": "id" }]
+      }
+      ```
+      - **401 Unauthorized**:
+      ```json
+      {
+         "message": "Token requerido"
+      }
+      ```
+      - **404 Not Found**:
+      ```json
+      {
+         "message": "Game not found"
+      }
+      ```
+
+- **DELETE /api/games/:id**
+   - **Descripción**: Elimina un juego por ID (requiere autenticación).
+   - **Parámetros**:
+      - `id`: Número entero positivo (requerido).
+   - **Respuestas**:
+      - **204 No Content**: Éxito, sin cuerpo de respuesta.
+      - **400 Bad Request** (ID inválido):
+      ```json
+      {
+         "errors": [{ "msg": "El ID debe ser un número entero positivo", "path": "id" }]
+      }
+      ```
+      - **404 Not Found**:
+      ```json
+      {
+         "message": "Game not found"
+      }
+      ```
+      - **401 Unauthorized**:
+      ```json
+      {
+         "message": "Token requerido"
+      }
+      ```
